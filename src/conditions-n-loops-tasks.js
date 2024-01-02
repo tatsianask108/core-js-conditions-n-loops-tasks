@@ -70,8 +70,12 @@ function getMaxNumber(a, b, c) {
  * {x: 1, y: 1}, {x: 2, y: 8} => false
  * {x: 1, y: 1}, {x: 2, y: 8} => false
  */
-function canQueenCaptureKing(/* queen, king */) {
-  throw new Error('Not implemented');
+function canQueenCaptureKing(queen, king) {
+  return (
+    queen.x === king.x ||
+    queen.y === king.y ||
+    Math.abs(queen.x - king.x) === Math.abs(queen.y - king.y)
+  );
 }
 
 /**
@@ -511,30 +515,27 @@ function sortByAsc(arr, low = 0, high = arr.length - 1) {
  *  '012345', 3 => '024135' => '043215' => '031425'
  *  'qwerty', 3 => 'qetwry' => 'qtrewy' => 'qrwtey'
  */
-function shuffleChar(/* str, iterations = 1 */) {
-  throw new Error('Not implemented');
-  // если итераций 4 то это как 0 итераций, строка приходит к исходному виду
-  // const normalizedIterations = iterations >= 4 ? iterations % 4 : iterations;
+function shuffleChar(str, iterations) {
+  if (iterations < 1) {
+    return str;
+  }
 
-  // if (iterations < 1) {
-  //   return str;
-  // }
+  const iters = iterations > str.length ? iterations % str.length : iterations;
+  let evenStr = '';
+  let oddStr = '';
 
-  // let evenStr = '';
-  // let oddStr = '';
+  for (let i = 0; i < str.length; i += 1) {
+    if (i % 2 === 0) {
+      evenStr += str[i];
+    } else {
+      oddStr += str[i];
+    }
+  }
 
-  // for (let i = 0; i < str.length; i += 1) {
-  //   if (i % 2 === 0) {
-  //     evenStr += str[i];
-  //   } else {
-  //     oddStr += str[i];
-  //   }
-  // }
+  const shuffledStr = evenStr + oddStr;
+  const normalizedIterations = iters - 1;
 
-  // const shuffledStr = evenStr + oddStr;
-  // const newIterations = normalizedIterations - 1;
-
-  // return shuffleChar(shuffledStr, newIterations);
+  return shuffleChar(shuffledStr, normalizedIterations);
 }
 
 /**
