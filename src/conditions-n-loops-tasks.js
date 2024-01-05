@@ -351,42 +351,49 @@ function getBalanceIndex(arr) {
  *          [10, 9,  8,  7]
  *        ]
  */
-function getSpiralMatrix(/* size */) {
-  throw new Error('Not implemented');
-  // const arr = Array.from({ length: size }, () => []);
-  // const result = [];
+function getSpiralMatrix(size) {
+  const matrix = [];
 
-  // let row = 0;
-  // let col = 0;
-  // let rowEnd = size - 1;
-  // let colEnd = size - 1;
-  // let counter = 1;
-  // while (col <= colEnd && row <= rowEnd) {
-  //   for (let i = col; i <= colEnd; i += 1) {
-  //     arr[row][i] = counter;
-  //     counter += 1;
-  //   }
-  //   row += 1;
+  for (let h = 0; h < size; h += 1) {
+    matrix[h] = [];
+    for (let v = 0; v < size; v += 1) {
+      matrix[h][v] = 0;
+    }
+  }
 
-  //   for (let i = row; i <= rowEnd; i += 1) {
-  //     arr[i][colEnd] = counter;
-  //     counter += 1;
-  //   }
-  //   colEnd -= 1;
+  let count = 1;
+  let rowStart = 0;
+  let rowEnd = size - 1;
+  let colStart = 0;
+  let colEnd = size - 1;
 
-  //   for (let i = colEnd; i >= col; i -= 1) {
-  //     arr[rowEnd][i] = counter;
-  //     counter += 1;
-  //   }
-  //   rowEnd -= 1;
+  while (rowStart <= rowEnd && colStart <= colEnd) {
+    for (let i = colStart; i <= colEnd; i += 1) {
+      matrix[rowStart][i] = count;
+      count += 1;
+    }
+    rowStart += 1;
 
-  //   for (let i = rowEnd; i >= row; i -= 1) {
-  //     arr[i][col] = counter;
-  //     counter += 1;
-  //   }
-  //   col += 1;
-  // }
-  // return arr;
+    for (let i = rowStart; i <= rowEnd; i += 1) {
+      matrix[i][colEnd] = count;
+      count += 1;
+    }
+    colEnd -= 1;
+
+    for (let i = colEnd; i >= colStart; i -= 1) {
+      matrix[rowEnd][i] = count;
+      count += 1;
+    }
+    rowEnd -= 1;
+
+    for (let i = rowEnd; i >= rowStart; i -= 1) {
+      matrix[i][colStart] = count;
+      count += 1;
+    }
+    colStart += 1;
+  }
+
+  return matrix;
 }
 
 /**
@@ -512,30 +519,35 @@ function sortByAsc(arr, low = 0, high = arr.length - 1) {
  *  'qwerty', 1 => 'qetwry'
  *  '012345', 2 => '024135' => '043215'
  *  'qwerty', 2 => 'qetwry' => 'qtrewy'
- *  '012345', 3 => '024135' => '043215' => '031425'
+ *  '012345', 3 => '024135' => '043215' => '031425' => '012345'
  *  'qwerty', 3 => 'qetwry' => 'qtrewy' => 'qrwtey'
  */
-function shuffleChar(str, iterations) {
-  if (iterations < 1) {
-    return str;
-  }
+function shuffleChar(str, iterations = 1) {
+  let result = str;
+  let step = 1;
 
-  const iters = iterations > str.length ? iterations % str.length : iterations;
-  let evenStr = '';
-  let oddStr = '';
+  while (step <= iterations) {
+    let evenStr = '';
+    let oddStr = '';
 
-  for (let i = 0; i < str.length; i += 1) {
-    if (i % 2 === 0) {
-      evenStr += str[i];
-    } else {
-      oddStr += str[i];
+    for (let i = 0; i < result.length; i += 1) {
+      if (i % 2 === 0) {
+        evenStr += result[i];
+      } else {
+        oddStr += result[i];
+      }
     }
+
+    result = evenStr + oddStr;
+
+    if (result === str) {
+      step = iterations - (iterations % step);
+    }
+
+    step += 1;
   }
 
-  const shuffledStr = evenStr + oddStr;
-  const normalizedIterations = iters - 1;
-
-  return shuffleChar(shuffledStr, normalizedIterations);
+  return result;
 }
 
 /**
