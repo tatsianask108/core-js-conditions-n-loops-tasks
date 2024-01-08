@@ -474,37 +474,39 @@ function rotateMatrix(matrix) {
 //   }
 //   return [...sortByAsc(left), pivot, ...sortByAsc(right)];
 // }
-function swapPosition(arr, i, j) {
-  const localArr = arr;
-  const temp = localArr[i];
-  localArr[i] = arr[j];
-  localArr[j] = temp;
-}
 
-function partition(arr, low, high) {
-  const pivot = arr[high];
-  let i = low - 1;
+function sortByAsc(arr) {
+  function swapPosition(array, i, j) {
+    const localArray = array;
+    const temp = localArray[i];
+    localArray[i] = array[j];
+    localArray[j] = temp;
+  }
 
-  for (let j = low; j < high; j += 1) {
-    if (arr[j] < pivot) {
-      i += 1;
-      swapPosition(arr, i, j);
+  function partition(arrP, lowP, highP) {
+    const pivot = arrP[highP];
+    let i = lowP - 1;
+    for (let j = lowP; j < highP; j += 1) {
+      if (arrP[j] < pivot) {
+        i += 1;
+        swapPosition(arrP, i, j);
+      }
+    }
+    swapPosition(arrP, i + 1, highP);
+    return i + 1;
+  }
+
+  function quickSort(arrQ, lowQ, highQ) {
+    if (lowQ < highQ) {
+      const pivotIndex = partition(arrQ, lowQ, highQ);
+      quickSort(arrQ, lowQ, pivotIndex - 1);
+      quickSort(arrQ, pivotIndex + 1, highQ);
     }
   }
 
-  swapPosition(arr, i + 1, high);
-  return i + 1;
-}
-
-function sortByAsc(arr, low = 0, high = arr.length - 1) {
-  if (low < high) {
-    const pivotIndex = partition(arr, low, high);
-    sortByAsc(arr, low, pivotIndex - 1);
-    sortByAsc(arr, pivotIndex + 1, high);
-  }
+  quickSort(arr, 0, arr.length - 1);
   return arr;
 }
-
 /**
  * Shuffles characters in a string so that the characters with an odd index are moved to the end of the string at each iteration.
  * Take into account that the string can be very long and the number of iterations is large. Consider how you can optimize your solution.
